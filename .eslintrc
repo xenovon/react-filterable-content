@@ -19,5 +19,13 @@
 
     // allow specifying true explicitly for boolean props
     "react/jsx-boolean-value": 0
+  },
+  "settings": {
+    "react": {
+      "createClass": "createReactClass",
+      "pragma": "React",
+      "version": "detect",
+      "flowVersion": "0.53" // Flow version
+    }
   }
 }
