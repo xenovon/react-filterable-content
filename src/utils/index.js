@@ -1,2 +1,2 @@
-export * from './filterChildren'
+export * from './FilterEngine'
 export * from './getValue'

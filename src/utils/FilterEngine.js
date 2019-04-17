@@ -6,86 +6,155 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react'
 import { getValue } from './getValue'
 
-const MAX_CACHE = 30
+import { FilterableGroup } from '../components'
 
-export class FilterableContent {
+const FILTERABLE_GROUP = 'props.filterable-group'
+const FILTERABLE_STICKY = 'props.filterable-sticky'
 
+export class FilterEngine {
   #filterResultCache = new Map()
   #filterKeywordCache = []
   #prevKeyword = ''
   #prevResult = []
+  #config={
+    maxCache: 30,
+    cacheMode: 'memory' // none, memory, localStorage,
+  }
 
+  constructor(userConfig) {
+    this.setConfig(userConfig)
+  }
 
-  filterChildren = ({children, keyword, isCached}) => {
+  setConfig(userConfig) {
+    this.#config = { ...this.#config, ...userConfig }
+  }
+
+  filterChildren({children, keyword}) {
+    console.log(children)
     if (!keyword) {
       return children
     }
 
-    if (keyword === prevKeyword) {
-      return prevResult
+    if (keyword === this.#prevKeyword) {
+      return this.#prevResult
     }
 
-    if (filterResultCache.get(keyword)) {
-      return filterResultCache.get(keyword)
+    if (this.#filterResultCache.get(keyword)) {
+      return this.#filterResultCache.get(keyword)
     }
+    let result = this.#transverseNode(children, keyword)
 
-    let result = transverseChildren(React.Children.toArray(children), keyword)
+    this.#addFilterCache(keyword, result)
 
-    addFilterCache(keyword, result)
-
+    console.log(result)
     return result
   }
 
+  #addFilterCache = (keyword, result) => {
+    this.#filterResultCache.set(keyword, result)
+    this.#filterKeywordCache.push(keyword)
 
-  const addFilterCache = (keyword, result) => {
-    filterResultCache.set(keyword, result)
-    filterKeywordCache.push(keyword)
-
-    if (filterResultCache.size > MAX_CACHE) {
-      let shiftedKeyword = filterKeywordCache.shift()
-      filterResultCache.delete(shiftedKeyword)
+    if (this.#filterResultCache.size > this.#config.maxCache) {
+      let shiftedKeyword = this.#filterKeywordCache.shift()
+      this.#filterResultCache.delete(shiftedKeyword)
     }
   }
 
-  const isIncludeText = (text, keyword) => {
+  #isIncludeText = (text, keyword) => {
     if (typeof text === 'string' && typeof keyword === 'string') {
       return text.toLowerCase().includes(keyword.toLowerCase())
     }
   }
 
-  const transverseChildren = (reactChildren, keyword, result) => {
-    if (!result) {
-      result = []
+  #isContainKeyword = (componentKeyword, keyword) => {
+    if (typeof componentKeyword === 'string' && typeof keyword === 'string') {
+      return componentKeyword.toLowerCase().includes(keyword.toLowerCase())
     }
-    if (reactChildren) {
-      if (reactChildren.forEach) {
-        reactChildren.forEach(value => {
-          let children = value.props.children
+  }
 
-          if (typeof children === 'string') {
-            isIncludeText(children, keyword) && result.push(value)
+  #shouldIncluded = (text, componentKeyword, keyword, isSticky) => {
+    return (this.#isIncludeText(text, keyword) || this.#isContainKeyword(componentKeyword, keyword) || isSticky)
+  }
+
+  #extractText = (reactNode, nodeText = '', nodeKeyword = '') => {
+    if (reactNode) {
+      if (reactNode.forEach) {
+        reactNode.forEach(value => {
+          if (typeof value === 'string') {
+            nodeText = `${nodeText} ${value}`
           } else {
-            let innerResult = []
-
-            innerResult = transverseChildren(children, keyword, innerResult)
-            if (innerResult) {
-              let props = children.props
-              let newValue = { ...value, props: { ...props, children: innerResult } }
-
-              result.push(newValue)
-            }
+            nodeKeyword = `${nodeKeyword} ${getValue(value, 'props.keyword') || ''} ${getValue(reactNode, 'props.alt') || ''}`
+            let result = this.#extractText(getValue(value, 'props.children'), nodeText, nodeKeyword)
+            nodeText = result.nodeText
+            nodeKeyword = result.nodeKeyword
           }
         })
+      } else if (typeof reactNode === 'string') {
+        nodeText = `${nodeText} ${reactNode}`
       } else {
-        let children = getValue(reactChildren, 'props.children')
-        isIncludeText(children, keyword) && result.push(reactChildren)
+        nodeKeyword = `${nodeKeyword} ${getValue(reactNode, 'props.keyword') || ''} ${getValue(reactNode, 'props.alt') || ''}`
+        let result = this.#extractText(getValue(reactNode, 'props.children'), nodeText, nodeKeyword)
+        nodeText = result.nodeText
+        nodeKeyword = result.nodeKeyword
+      }
+    }
+    return { nodeText, nodeKeyword }
+  }
+  /**
+   * @param {number} a - this is a value.
+   * @param {number} b - this is a value.
+   * @return {number} result of the sum value.
+   */
+  #processChildren = ({reactNode, parentNode, keyword, result}) => {
+    let children = getValue(reactNode, 'props.children')
+    let componentKeyword = `${getValue(reactNode, 'props.keyword') || ''} ${getValue(reactNode, 'props.alt') || ''}`
+
+    if (typeof reactNode === 'string' && parentNode) {
+      let parentKeyword = `${getValue(parentNode, 'props.keyword') || ''} ${getValue(parentNode, 'props.alt') || ''}`
+
+      this.#shouldIncluded(reactNode,
+        parentKeyword,
+        keyword,
+        getValue(parentNode, FILTERABLE_STICKY)) &&
+        result.push(parentNode)
+    } else if (getValue(reactNode, 'type') === FilterableGroup || getValue(reactNode, FILTERABLE_GROUP)) {
+      let { nodeText, nodeKeyword } = this.#extractText(reactNode)
+      this.#shouldIncluded(nodeText,
+        nodeKeyword,
+        keyword,
+        getValue(reactNode, FILTERABLE_STICKY)) &&
+        result.push(reactNode)
+    } else if (typeof children === 'string') {
+      this.#shouldIncluded(children,
+        componentKeyword,
+        keyword,
+        getValue(reactNode, FILTERABLE_STICKY)) &&
+        result.push(reactNode)
+    } else {
+      let innerResult = []
+      innerResult = this.#transverseNode(children, keyword, innerResult)
+      if (innerResult && innerResult.length) {
+        let props = reactNode.props
+        let newNode = { ...reactNode, props: { ...props, children: innerResult } }
+
+        result.push(newNode)
+      }
+    }
+  }
+
+  #transverseNode = (reactNode, keyword, result = []) => {
+    if (reactNode) {
+      if (reactNode.forEach) {
+        reactNode.forEach(value => {
+          this.#processChildren({reactNode: value, parentNode: reactNode, keyword, result})
+        })
+      } else {
+        this.#processChildren({reactNode, keyword, result})
       }
     }
 
     return result
   }
-
 }

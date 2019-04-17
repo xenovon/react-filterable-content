@@ -1,26 +1,25 @@
 import { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { filterChildren } from '../utils'
+import { FilterEngine } from '../utils'
 
 export class FilterableContent extends PureComponent {
   static propTypes = {
     keyword: PropTypes.string,
     children: PropTypes.node,
-    isCached: PropTypes.bool
-  }
-
-  static defaultProps = {
-    isCached: true
+    config: PropTypes.shape({
+      cacheMode: PropTypes.oneOf(['none', 'memory', 'localStorage']),
+      maxCache: PropTypes.number
+    })
   }
 
   constructor(props) {
     super(props)
-    this.state = {
-      children: props.children
-    }
+    let { config } = this.props
+    this.filterEngine = new FilterEngine(config)
   }
 
   render() {
-    return filterChildren(this.props)
+    let { keyword, children } = this.props
+    return this.filterEngine.filterChildren({keyword, children})
   }
 }

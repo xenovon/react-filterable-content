@@ -25,7 +25,7 @@
       "createClass": "createReactClass",
       "pragma": "React",
       "version": "detect",
-      "flowVersion": "0.53" // Flow version
+      "flowVersion": "0.53"
     }
   }
 }

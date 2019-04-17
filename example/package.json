@@ -8,8 +8,9 @@
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-filterable-content": "link:..",
     "react-scripts": "^1.1.4",
-    "react-filterable-content": "link:.."
+    "styled-components": "^4.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
