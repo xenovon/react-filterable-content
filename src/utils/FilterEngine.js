@@ -9,6 +9,7 @@
 import { getValue } from './getValue'
 
 import { FilterableGroup } from '../components'
+import { performanceStart, performanceEnd } from './performance';
 
 const FILTERABLE_GROUP = 'props.filterable-group'
 const FILTERABLE_STICKY = 'props.filterable-sticky'
@@ -32,7 +33,9 @@ export class FilterEngine {
   }
 
   filterChildren({children, keyword}) {
-    console.log(children)
+
+    performanceStart('Filter Engine');
+
     if (!keyword) {
       return children
     }
@@ -48,7 +51,8 @@ export class FilterEngine {
 
     this.#addFilterCache(keyword, result)
 
-    console.log(result)
+    performanceEnd();
+
     return result
   }
 
@@ -81,7 +85,7 @@ export class FilterEngine {
   #extractText = (reactNode, nodeText = '', nodeKeyword = '') => {
     if (reactNode) {
       if (reactNode.forEach) {
-        reactNode.forEach(value => {
+        reactNode.forEach(function(value){
           if (typeof value === 'string') {
             nodeText = `${nodeText} ${value}`
           } else {
@@ -90,7 +94,7 @@ export class FilterEngine {
             nodeText = result.nodeText
             nodeKeyword = result.nodeKeyword
           }
-        })
+        });
       } else if (typeof reactNode === 'string') {
         nodeText = `${nodeText} ${reactNode}`
       } else {
@@ -147,9 +151,10 @@ export class FilterEngine {
   #transverseNode = (reactNode, keyword, result = []) => {
     if (reactNode) {
       if (reactNode.forEach) {
-        reactNode.forEach(value => {
-          this.#processChildren({reactNode: value, parentNode: reactNode, keyword, result})
-        })
+          reactNode.forEach(function(value){
+            this.#processChildren({reactNode: value, parentNode: reactNode, keyword, result})
+          }); 
+        }
       } else {
         this.#processChildren({reactNode, keyword, result})
       }
