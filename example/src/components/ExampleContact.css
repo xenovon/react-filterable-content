@@ -1,0 +1,55 @@
+.example-contact-container{
+  border: 1px solid #ddd;
+  flex: 1;
+  margin: 10px;
+  padding: 15px;
+}
+
+.example-contact-container h2{
+  font-size: 16px;
+}
+
+.example-contact-container ul{
+  padding-top: 10px;
+  padding-left: 10px;
+}
+.example-contact-container ul li{
+  list-style: none;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  border: 1px solid #ddd;
+  margin: 20px 0;
+  border-radius: 5px;
+}
+
+.example-contact-container ul li .photo-profile {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.example-contact-container ul li .photo-profile img{
+  border-radius: 100px;
+  padding: 10px;
+}
+.example-contact-container ul li  .identity {
+  flex: 3;
+}
+
+.example-contact-container ul li  .identity h3{
+  font-size: 16px;
+  border-bottom: 1px solid #ddd;
+  margin:10px 0 5px 0;
+  padding-bottom: 5px;
+}
+
+
+.example-contact-container ul li  .identity p{
+  font-size: 13px;
+}
+
+.example-contact-container ul li  .identity .school{
+  font-size: 12px;
+  font-style: italic;
+  margin: 5px 0;
+}

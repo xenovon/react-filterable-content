@@ -6,6 +6,7 @@ body {
 
 input {
   height: 20px;
+  min-width: 300px;
   border: 1px solid #ccc;
   padding: 5px 10px;
 }

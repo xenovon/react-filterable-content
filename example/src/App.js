@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import ExampleComplex from './components/ExampleComplex';
-import ExampleSimple from './components/ExampleSimple';
+import ExampleBlock from './components/ExampleBlock';
+import ExampleCountry from './components/ExampleCountry';
+import ExampleContact from './components/ExampleContact';
 import { FilterableContent, FilterableGroup, FilterableSection } from 'react-filterable-content';
 
 export default class App extends Component {
@@ -25,8 +26,9 @@ export default class App extends Component {
 
     return (
       <div className="main-container">
-        <ExampleSimple/>
-        <ExampleComplex/>
+        <ExampleCountry/>
+        <ExampleBlock/>
+        <ExampleContact/>
       </div>
     )
   }

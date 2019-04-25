@@ -7,8 +7,8 @@ export class FilterableContent extends PureComponent {
     keyword: PropTypes.string,
     children: PropTypes.node,
     config: PropTypes.shape({
-      cacheMode: PropTypes.oneOf(['none', 'memory', 'localStorage']),
-      maxCache: PropTypes.number
+      maxCache: PropTypes.number,
+      localStoragePrefix: PropTypes.string,
     })
   }
 

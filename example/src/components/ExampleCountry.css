@@ -1,0 +1,35 @@
+.example-country-container{
+  border: 1px solid #ddd;
+  flex: 1;
+  margin: 10px;
+  padding: 15px;
+}
+
+.example-country-container h2{
+  font-size: 16px;
+}
+
+.example-country-container ul{
+  padding-top: 10px;
+  padding-left: 10px;
+}
+.example-country-container ul li{
+  list-style: none;
+  font-size: 18px;
+  font-weight: bold;
+}
+.example-country-container ul li h3{
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+}
+
+.example-country-container ul li ul li{
+  font-size: 15px;
+  font-weight: 400;
+  padding: 2px 0 5px 20px;
+}
+
+.example-country-container ul li{
+  list-style: none;
+}
+

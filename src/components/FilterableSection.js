@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 export const FilterableSection = props => {
-  let { title, description, children } = props
+  let { stickyContent, children, ...passingProps } = props
+
   return (
-    <section>
-      {title}
-      {description}
+    <section { ...passingProps }>
+      {stickyContent}
       {children}
     </section>
   )

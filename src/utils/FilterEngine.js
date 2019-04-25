@@ -5,27 +5,37 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-
+import React, { Fragment } from 'react';
 import { getValue } from './getValue'
-
+import { Highlighter } from './Highlighter'
 import { FilterableGroup } from '../components'
-import { performanceStart, performanceEnd } from './performance';
+import { performanceStart, performanceEnd } from './performance'
 
 const FILTERABLE_GROUP = 'props.filterable-group'
 const FILTERABLE_STICKY = 'props.filterable-sticky'
+const FILTERABLE_IGNORE = 'props.filterable-ignore'
 
 export class FilterEngine {
   #filterResultCache = new Map()
   #filterKeywordCache = []
   #prevKeyword = ''
   #prevResult = []
+  #storageKey = ''
   #config={
     maxCache: 30,
-    cacheMode: 'memory' // none, memory, localStorage,
+    displayPerformanceLog: true,
+    highlightResult: true,
+    highlightStyle: {
+      background: '#fff542',
+      display: 'inline',
+      padding: '2px 0'
+    }
   }
+  #highlighter = '';
 
   constructor(userConfig) {
     this.setConfig(userConfig)
+    this.#highlighter = new Highlighter(this.#config)
   }
 
   setConfig(userConfig) {
@@ -34,24 +44,31 @@ export class FilterEngine {
 
   filterChildren({children, keyword}) {
 
-    performanceStart('Filter Engine');
+    if(this.#config.displayPerformanceLog){
+      performanceStart('Filter Engine')
+    }
+    let result
 
     if (!keyword) {
       return children
     }
-
+    this.#highlighter.resetIteration();
+    
     if (keyword === this.#prevKeyword) {
-      return this.#prevResult
+      result = this.#prevResult
+    } else if (this.#filterResultCache && this.#filterResultCache.get && this.#filterResultCache.get(keyword)) {
+      result = this.#filterResultCache.get(keyword)
+    } else {
+      result = this.#transverseNode(children, keyword)
+
+      this.#addFilterCache(keyword, result);
     }
 
-    if (this.#filterResultCache.get(keyword)) {
-      return this.#filterResultCache.get(keyword)
+    // console.log(children);
+    // console.log(result);
+    if(this.#config.displayPerformanceLog){
+      performanceEnd()
     }
-    let result = this.#transverseNode(children, keyword)
-
-    this.#addFilterCache(keyword, result)
-
-    performanceEnd();
 
     return result
   }
@@ -85,7 +102,7 @@ export class FilterEngine {
   #extractText = (reactNode, nodeText = '', nodeKeyword = '') => {
     if (reactNode) {
       if (reactNode.forEach) {
-        reactNode.forEach(function(value){
+        reactNode.forEach((value) => {
           if (typeof value === 'string') {
             nodeText = `${nodeText} ${value}`
           } else {
@@ -94,7 +111,7 @@ export class FilterEngine {
             nodeText = result.nodeText
             nodeKeyword = result.nodeKeyword
           }
-        });
+        })
       } else if (typeof reactNode === 'string') {
         nodeText = `${nodeText} ${reactNode}`
       } else {
@@ -106,6 +123,7 @@ export class FilterEngine {
     }
     return { nodeText, nodeKeyword }
   }
+
   /**
    * @param {number} a - this is a value.
    * @param {number} b - this is a value.
@@ -122,20 +140,20 @@ export class FilterEngine {
         parentKeyword,
         keyword,
         getValue(parentNode, FILTERABLE_STICKY)) &&
-        result.push(parentNode)
+        result.push(this.#highlighter.injectHighlight(parentNode, keyword))
     } else if (getValue(reactNode, 'type') === FilterableGroup || getValue(reactNode, FILTERABLE_GROUP)) {
       let { nodeText, nodeKeyword } = this.#extractText(reactNode)
       this.#shouldIncluded(nodeText,
         nodeKeyword,
         keyword,
         getValue(reactNode, FILTERABLE_STICKY)) &&
-        result.push(reactNode)
+        result.push(this.#highlighter.injectHighlight(reactNode, keyword))
     } else if (typeof children === 'string') {
       this.#shouldIncluded(children,
         componentKeyword,
         keyword,
         getValue(reactNode, FILTERABLE_STICKY)) &&
-        result.push(reactNode)
+        result.push(this.#highlighter.injectHighlight(reactNode, keyword))
     } else {
       let innerResult = []
       innerResult = this.#transverseNode(children, keyword, innerResult)
@@ -151,10 +169,9 @@ export class FilterEngine {
   #transverseNode = (reactNode, keyword, result = []) => {
     if (reactNode) {
       if (reactNode.forEach) {
-          reactNode.forEach(function(value){
-            this.#processChildren({reactNode: value, parentNode: reactNode, keyword, result})
-          }); 
-        }
+        reactNode.forEach((value) => {
+          this.#processChildren({reactNode: value, parentNode: reactNode, keyword, result})
+        })
       } else {
         this.#processChildren({reactNode, keyword, result})
       }
