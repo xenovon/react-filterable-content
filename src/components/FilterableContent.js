@@ -8,7 +8,10 @@ class FilterableContentClass extends PureComponent {
     children: PropTypes.node,
     config: PropTypes.shape({
       maxCache: PropTypes.number,
-      localStoragePrefix: PropTypes.string,
+      displayPerformanceLog: PropTypes.bool,
+      highlightResult: PropTypes.bool,
+      caseSensitive: PropTypes.bool,
+      highlightStyle: PropTypes.object
     })
   }
 

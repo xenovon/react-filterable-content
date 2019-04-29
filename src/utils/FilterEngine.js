@@ -20,9 +20,9 @@ export class FilterEngine {
   #storageKey = ''
   #config={
     maxCache: 30,
-    displayPerformanceLog: true,
+    displayPerformanceLog: false,
     highlightResult: true,
-    caseSensitive: true,
+    caseSensitive: false,
     highlightStyle: {
       background: '#fff542',
       display: 'inline',
