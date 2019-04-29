@@ -12,7 +12,7 @@ npm install --save react-filterable-content
 
 ## Usage
 
-### Basic Example
+### Basic Usage
 
 ```jsx
 import React, { Component } from 'react'
@@ -60,6 +60,13 @@ export default class Example extends Component {
   }
 }
 ```
+
+
+### More Advanced Usage
+
+*TODO*
+
+
 
 ## License
 
