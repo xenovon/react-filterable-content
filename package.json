@@ -1,8 +1,8 @@
 {
   "name": "react-filterable-content",
-  "version": "1.0.0",
-  "description": "",
-  "author": "xenovon",
+  "version": "1.0.0-beta.1",
+  "description": "React library to make any react component is searchable and filterable",
+  "author": "Adnan Hidayat P <komputok@gmail.com>",
   "license": "MIT",
   "repository": "xenovon/react-filterable-content",
   "main": "dist/index.js",
@@ -12,6 +12,14 @@
     "node": ">=8",
     "npm": ">=5"
   },
+  "keywords": [
+    "react",
+    "filter",
+    "filterable",
+    "search",
+    "list",
+    "searchable"
+  ],
   "scripts": {
     "test": "cross-env CI=1 react-scripts test --env=jsdom",
     "test:watch": "react-scripts test --env=jsdom",
@@ -20,6 +28,9 @@
     "prepare": "yarn run build",
     "predeploy": "cd example && yarn install && yarn run build",
     "deploy": "gh-pages -d example/build"
+  },
+  "dependencies": {
+    "lodash.debounce": "^4.0.8"
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",

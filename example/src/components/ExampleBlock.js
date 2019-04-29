@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './ExampleBlock.css';
-import { FilterableContent, FilterableGroup, FilterableSection } from 'react-filterable-content'
+import { FilterableContent, FilterableSection } from 'react-filterable-content'
 
 export default class ExampleBlock extends Component {
 
@@ -61,11 +61,13 @@ export default class ExampleBlock extends Component {
             <p>This paragraf will only visible if some of the content match with the keyword.</p>
           </FilterableSection>
 
+
           <FilterableSection 
             className="panel"
-            stickyContent={<h3>Sticky Demo 2</h3>}
+            stickyContent={<h3>Ignore Demo 1</h3>}
            >
-            <h4 filterable-sticky="true">How To Cook Chicken</h4>
+            <h4 filterable-ignore="true">This title is ignored</h4>
+            <p>This paragraf is not ignored</p>
           </FilterableSection>
 
         </FilterableContent>

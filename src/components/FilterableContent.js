@@ -1,8 +1,8 @@
 import React, { PureComponent, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { FilterEngine } from '../utils'
+import { FilterEngine, debounceRender } from '../utils'
 
-export class FilterableContent extends PureComponent {
+class FilterableContentClass extends PureComponent {
   static propTypes = {
     keyword: PropTypes.string,
     children: PropTypes.node,
@@ -23,3 +23,5 @@ export class FilterableContent extends PureComponent {
     return this.filterEngine.filterChildren({keyword, children}) || <Fragment/>
   }
 }
+
+export const FilterableContent = debounceRender(FilterableContentClass, 110)

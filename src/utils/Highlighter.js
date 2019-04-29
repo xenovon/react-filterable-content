@@ -1,13 +1,17 @@
 /**
  * Copyright (c) Adnan Hidayat P
  * komputok@gmail.com, http://adnanhidayat.com
- *
+ * 
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
+ *
+ * This class is to add highlight to the string that contain the keyword.
  */
 
 import React from 'react'
 import { getValue } from './getValue'
+import { toLowerCase } from './toLowerCase'
+import { FILTERABLE_IGNORE } from './constant'
 
 export class Highlighter {
   #config={}
@@ -26,9 +30,9 @@ export class Highlighter {
   }
 
   /**
-   * @param {number} a - this is a value.
-   * @param {number} b - this is a value.
-   * @return {number} node with injected highlight.
+   * @param {node} reactNode - React node where the highlight will be added
+   * @param {string} keyword - keyword for the highlight.
+   * @return {node} node with highlight injected.
    */
   injectHighlight = (reactNode, keyword) => {
     this.#iteration++
@@ -42,7 +46,11 @@ export class Highlighter {
         newChildren = this.#processHighlightText(reactNode, keyword)
         elementType = 'string'
       } else if (typeof children === 'string') {
-        newChildren = this.#processHighlightText(children, keyword)
+          if(this.#hasIgnoreFlag(reactNode)){
+            elementType='non-string-element'
+          }else{
+            newChildren = this.#processHighlightText(children, keyword)
+          }
       } else if (children && children.forEach) {
         children.forEach(node => {
           newChildren.push(this.injectHighlight(node, keyword))
@@ -63,7 +71,7 @@ export class Highlighter {
       }else{
         return React.cloneElement(
           clonedNode,
-          {key: this.#iteration},
+          {key: clonedNode.key || this.#iteration},
           [ ...newChildren]
         )
       }
@@ -72,19 +80,27 @@ export class Highlighter {
     }
   }
 
+  #hasIgnoreFlag = node => {
+    if(node && getValue(node, FILTERABLE_IGNORE)){
+      return true
+    }
+    return false
+  }
+  
+
   #processHighlightText = (text='', keyword='') => {
 
     let childrens = []
 
     if (typeof text === 'string' && typeof keyword === 'string') {
 
-      let textLowercase = text.toLowerCase();
+      let textLowercase = toLowerCase(text, this.#config);
       let splittedMap = [];
 
       let fromIndex = 0;
       let i = 0;
       do {
-        let indexOf = textLowercase.indexOf(keyword.toLowerCase(), fromIndex)
+        let indexOf = textLowercase.indexOf(toLowerCase(keyword, this.#config), fromIndex)
 
         if(indexOf >= 0){
           splittedMap.push([fromIndex, indexOf])
@@ -115,7 +131,6 @@ export class Highlighter {
           ))
         }
       }
-
     }  
 
     return childrens

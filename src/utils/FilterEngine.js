@@ -8,12 +8,9 @@
 import React, { Fragment } from 'react';
 import { getValue } from './getValue'
 import { Highlighter } from './Highlighter'
-import { FilterableGroup } from '../components'
 import { performanceStart, performanceEnd } from './performance'
-
-const FILTERABLE_GROUP = 'props.filterable-group'
-const FILTERABLE_STICKY = 'props.filterable-sticky'
-const FILTERABLE_IGNORE = 'props.filterable-ignore'
+import { toLowerCase } from './toLowerCase'
+import { FILTERABLE_GROUP, FILTERABLE_STICKY, FILTERABLE_IGNORE } from './constant'
 
 export class FilterEngine {
   #filterResultCache = new Map()
@@ -25,6 +22,7 @@ export class FilterEngine {
     maxCache: 30,
     displayPerformanceLog: true,
     highlightResult: true,
+    caseSensitive: true,
     highlightStyle: {
       background: '#fff542',
       display: 'inline',
@@ -64,8 +62,6 @@ export class FilterEngine {
       this.#addFilterCache(keyword, result);
     }
 
-    // console.log(children);
-    // console.log(result);
     if(this.#config.displayPerformanceLog){
       performanceEnd()
     }
@@ -83,15 +79,22 @@ export class FilterEngine {
     }
   }
 
+  #hasIgnoreFlag = node => {
+    if(node && getValue(node, FILTERABLE_IGNORE)){
+      return true
+    }
+    return false
+  }
+
   #isIncludeText = (text, keyword) => {
     if (typeof text === 'string' && typeof keyword === 'string') {
-      return text.toLowerCase().includes(keyword.toLowerCase())
+      return toLowerCase(text, this.#config).includes(toLowerCase(keyword, this.#config))
     }
   }
 
   #isContainKeyword = (componentKeyword, keyword) => {
     if (typeof componentKeyword === 'string' && typeof keyword === 'string') {
-      return componentKeyword.toLowerCase().includes(keyword.toLowerCase())
+      return toLowerCase(componentKeyword, this.#config).includes(toLowerCase(keyword, this.#config))
     }
   }
 
@@ -105,29 +108,28 @@ export class FilterEngine {
         reactNode.forEach((value) => {
           if (typeof value === 'string') {
             nodeText = `${nodeText} ${value}`
-          } else {
+          } else if(!this.#hasIgnoreFlag(value)){
             nodeKeyword = `${nodeKeyword} ${getValue(value, 'props.keyword') || ''} ${getValue(reactNode, 'props.alt') || ''}`
             let result = this.#extractText(getValue(value, 'props.children'), nodeText, nodeKeyword)
             nodeText = result.nodeText
-            nodeKeyword = result.nodeKeyword
+            nodeKeyword = result.nodeKeyword              
           }
         })
       } else if (typeof reactNode === 'string') {
         nodeText = `${nodeText} ${reactNode}`
-      } else {
+      } else if(!this.#hasIgnoreFlag(reactNode)){
         nodeKeyword = `${nodeKeyword} ${getValue(reactNode, 'props.keyword') || ''} ${getValue(reactNode, 'props.alt') || ''}`
         let result = this.#extractText(getValue(reactNode, 'props.children'), nodeText, nodeKeyword)
         nodeText = result.nodeText
-        nodeKeyword = result.nodeKeyword
+        nodeKeyword = result.nodeKeyword         
       }
     }
     return { nodeText, nodeKeyword }
   }
 
   /**
-   * @param {number} a - this is a value.
-   * @param {number} b - this is a value.
-   * @return {number} result of the sum value.
+   * 
+   *
    */
   #processChildren = ({reactNode, parentNode, keyword, result}) => {
     let children = getValue(reactNode, 'props.children')
@@ -136,19 +138,24 @@ export class FilterEngine {
     if (typeof reactNode === 'string' && parentNode) {
       let parentKeyword = `${getValue(parentNode, 'props.keyword') || ''} ${getValue(parentNode, 'props.alt') || ''}`
 
+      !this.#hasIgnoreFlag(parentNode) &&
       this.#shouldIncluded(reactNode,
         parentKeyword,
         keyword,
         getValue(parentNode, FILTERABLE_STICKY)) &&
         result.push(this.#highlighter.injectHighlight(parentNode, keyword))
-    } else if (getValue(reactNode, 'type') === FilterableGroup || getValue(reactNode, FILTERABLE_GROUP)) {
+    } else if (getValue(reactNode, FILTERABLE_GROUP)) {
       let { nodeText, nodeKeyword } = this.#extractText(reactNode)
+
+      !this.#hasIgnoreFlag(reactNode) &&
       this.#shouldIncluded(nodeText,
         nodeKeyword,
         keyword,
         getValue(reactNode, FILTERABLE_STICKY)) &&
         result.push(this.#highlighter.injectHighlight(reactNode, keyword))
     } else if (typeof children === 'string') {
+
+      !this.#hasIgnoreFlag(reactNode) &&
       this.#shouldIncluded(children,
         componentKeyword,
         keyword,

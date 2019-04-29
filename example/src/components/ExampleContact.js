@@ -3,7 +3,7 @@ import './ExampleContact.css';
 import contactData1 from '../data/contact-data-1.json';
 import samplePhoto from '../data/sample-photo.png';
 
-import { FilterableContent, FilterableGroup, FilterableSection } from 'react-filterable-content'
+import { FilterableContent } from 'react-filterable-content'
 
 export default class ExampleContact extends Component {
 
@@ -37,8 +37,8 @@ export default class ExampleContact extends Component {
             <p className="school">{contact.school}</p>
           </div>
           <div>
-            <p><span>Email : </span>{contact.email}</p>
-            <p><span>Phone : </span>{contact.phone}</p>
+            <p><span filterable-ignore='true'>Email : </span>{contact.email}</p>
+            <p><span filterable-ignore='true'>Phone : </span>{contact.phone}</p>
           </div>
         </div>
       </li>

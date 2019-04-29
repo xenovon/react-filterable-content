@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './ExampleCountry.css';
 import countryData from '../data/country-data.json';
 
-import { FilterableContent, FilterableGroup, FilterableSection } from 'react-filterable-content'
+import { FilterableContent } from 'react-filterable-content'
 
 export default class ExampleCountry extends Component {
 
