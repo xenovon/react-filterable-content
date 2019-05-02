@@ -17,7 +17,6 @@ export class FilterEngine {
   #filterKeywordCache = []
   #prevKeyword = ''
   #prevResult = []
-  #storageKey = ''
   #config={
     maxCache: 30,
     displayPerformanceLog: false,
@@ -65,6 +64,9 @@ export class FilterEngine {
     if(this.#config.displayPerformanceLog){
       performanceEnd()
     }
+
+    this.#prevResult = result
+    this.#prevKeyword = keyword
 
     return result
   }

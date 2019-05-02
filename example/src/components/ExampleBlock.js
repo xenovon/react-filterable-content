@@ -22,8 +22,7 @@ export default class ExampleBlock extends Component {
 
   render () {
     let { keyword } = this.state;
-    console.log(keyword);
-
+    
     return (
       <div className="example-block-container">
         <input
