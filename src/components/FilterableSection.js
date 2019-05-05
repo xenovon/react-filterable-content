@@ -14,6 +14,5 @@ export const FilterableSection = props => {
 
 FilterableSection.propTypes = {
   children: PropTypes.node,
-  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
-  description: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
+  stickyContent: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 }

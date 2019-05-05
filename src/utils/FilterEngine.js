@@ -12,22 +12,25 @@ import { performanceStart, performanceEnd } from './performance'
 import { toLowerCase } from './toLowerCase'
 import { FILTERABLE_GROUP, FILTERABLE_STICKY, FILTERABLE_IGNORE } from './constant'
 
+
+export const defaultConfig = {
+  maxCache: 30,
+  displayPerformanceLog: false,
+  highlightResult: true,
+  caseSensitive: false,
+  highlightStyle: {
+    background: '#fff542',
+    display: 'inline',
+    padding: '2px 0'
+  }
+}
+
 export class FilterEngine {
   #filterResultCache = new Map()
   #filterKeywordCache = []
   #prevKeyword = ''
   #prevResult = []
-  #config={
-    maxCache: 30,
-    displayPerformanceLog: false,
-    highlightResult: true,
-    caseSensitive: false,
-    highlightStyle: {
-      background: '#fff542',
-      display: 'inline',
-      padding: '2px 0'
-    }
-  }
+  #config=defaultConfig
   #highlighter = '';
 
   constructor(userConfig) {
@@ -37,6 +40,10 @@ export class FilterEngine {
 
   setConfig(userConfig) {
     this.#config = { ...this.#config, ...userConfig }
+  }
+
+  getConfig() {
+    return this.#config
   }
 
   filterChildren({children, keyword}) {
@@ -145,7 +152,7 @@ export class FilterEngine {
         parentKeyword,
         keyword,
         getValue(parentNode, FILTERABLE_STICKY)) &&
-        result.push(this.#highlighter.injectHighlight(parentNode, keyword))
+      result.push(this.#highlighter.injectHighlight(parentNode, keyword))
     } else if (getValue(reactNode, FILTERABLE_GROUP)) {
       let { nodeText, nodeKeyword } = this.#extractText(reactNode)
 
@@ -154,7 +161,7 @@ export class FilterEngine {
         nodeKeyword,
         keyword,
         getValue(reactNode, FILTERABLE_STICKY)) &&
-        result.push(this.#highlighter.injectHighlight(reactNode, keyword))
+      result.push(this.#highlighter.injectHighlight(reactNode, keyword))
     } else if (typeof children === 'string') {
 
       !this.#hasIgnoreFlag(reactNode) &&
@@ -162,7 +169,7 @@ export class FilterEngine {
         componentKeyword,
         keyword,
         getValue(reactNode, FILTERABLE_STICKY)) &&
-        result.push(this.#highlighter.injectHighlight(reactNode, keyword))
+      result.push(this.#highlighter.injectHighlight(reactNode, keyword))
     } else {
       let innerResult = []
       innerResult = this.#transverseNode(children, keyword, innerResult)

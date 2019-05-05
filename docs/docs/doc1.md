@@ -1,29 +1,50 @@
 ---
 id: doc1
 title: Latin-ish
-sidebar_label: Example Page
+sidebar_label: Docs
 ---
 
-Check the [documentation](https://docusaurus.io) for how to use Docusaurus.
+## How It's Work
 
-## Lorem
+This library work by tapping the component's rendering, going through the component hierarchy to find the matching keyword, give highlight styling to the matching text and only render the one that has matching text.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque elementum dignissim ultricies. Fusce rhoncus ipsum tempor eros aliquam consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus elementum massa eget nulla aliquet sagittis. Proin odio tortor, vulputate ut odio in, ultrices ultricies augue. Cras ornare ultrices lorem malesuada iaculis. Etiam sit amet libero tempor, pulvinar mauris sed, sollicitudin sapien.
+## Getting Started
 
-## Mauris In Code
+* FilterableContent
+This is main building block for this library. We should wrap the content that need to be filtered in this component. 
+
+* FilterableSection
+This is component
+
+## Config and Customize Filter Behaviour
+There is some configuration that can affect the filter behaviour. Below is the default configuration for the FilterEngine. 
 
 ```
-Mauris vestibulum ullamcorper nibh, ut semper purus pulvinar ut. Donec volutpat orci sit amet mauris malesuada, non pulvinar augue aliquam. Vestibulum ultricies at urna ut suscipit. Morbi iaculis, erat at imperdiet semper, ipsum nulla sodales erat, eget tincidunt justo dui quis justo. Pellentesque dictum bibendum diam at aliquet. Sed pulvinar, dolor quis finibus ornare, eros odio facilisis erat, eu rhoncus nunc dui sed ex. Nunc gravida dui massa, sed ornare arcu tincidunt sit amet. Maecenas efficitur sapien neque, a laoreet libero feugiat ut.
+  {
+    maxCache: 30, 
+    highlightResult: true,
+    caseSensitive: false,
+    highlightStyle: {
+      background: '#fff542',
+      display: 'inline',
+      padding: '2px 0'
+    }
+  }
 ```
 
-## Nulla
+* *maxCache* - Every search result will be cached in memory, this config is to configure how many search result keeped in the memory. 
+* *highlightResult* - Set whether the found keyword should be highlighted or not. You can set this as false to make the searching faster.
+* *caseSensitive* - Set true if you want the searching is case sensitive
+* *highlightStyle* - Styling for the highlight, you can change the color, opacity, and other detail in here. The style should be plain css object. 
 
-Nulla facilisi. Maecenas sodales nec purus eget posuere. Sed sapien quam, pretium a risus in, porttitor dapibus erat. Sed sit amet fringilla ipsum, eget iaculis augue. Integer sollicitudin tortor quis ultricies aliquam. Suspendisse fringilla nunc in tellus cursus, at placerat tellus scelerisque. Sed tempus elit a sollicitudin rhoncus. Nulla facilisi. Morbi nec dolor dolor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras et aliquet lectus. Pellentesque sit amet eros nisi. Quisque ac sapien in sapien congue accumsan. Nullam in posuere ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Proin lacinia leo a nibh fringilla pharetra.
+To override the configuration, you can pass config object as props in FilterableContent component.
 
-## Orci
+You can also add specific props to the components to instruct the Filter Engine about what to do with those components. Props that available are: 
 
-Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin venenatis lectus dui, vel ultrices ante bibendum hendrerit. Aenean egestas feugiat dui id hendrerit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur in tellus laoreet, eleifend nunc id, viverra leo. Proin vulputate non dolor vel vulputate. Curabitur pretium lobortis felis, sit amet finibus lorem suscipit ut. Sed non mollis risus. Duis sagittis, mi in euismod tincidunt, nunc mauris vestibulum urna, at euismod est elit quis erat. Phasellus accumsan vitae neque eu placerat. In elementum arcu nec tellus imperdiet, eget maximus nulla sodales. Curabitur eu sapien eget nisl sodales fermentum.
+* *filterable-sticky* - It will make sure the component always be displayed, although they don't have the matched keyword. This props can be useful for title component or layout related components.
+* *filterable-group* - To group the components. It's useful for component that consist of several child component and we want display all part of the components if there any matching keyword inside the child component. Without this flag, Filter engine will only display the child that have matching keyword.
+* *filterable-ignore* - If components has this props, then Filter engine will ignore this component. It will not count as result despite the component has the keyword.
 
-## Phasellus
+## Example
 
-Phasellus pulvinar ex id commodo imperdiet. Praesent odio nibh, sollicitudin sit amet faucibus id, placerat at metus. Donec vitae eros vitae tortor hendrerit finibus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Quisque vitae purus dolor. Duis suscipit ac nulla et finibus. Phasellus ac sem sed dui dictum gravida. Phasellus eleifend vestibulum facilisis. Integer pharetra nec enim vitae mattis. Duis auctor, lectus quis condimentum bibendum, nunc dolor aliquam massa, id bibendum orci velit quis magna. Ut volutpat nulla nunc, sed interdum magna condimentum non. Sed urna metus, scelerisque vitae consectetur a, feugiat quis magna. Donec dignissim ornare nisl, eget tempor risus malesuada quis.
+

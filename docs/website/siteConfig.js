@@ -21,17 +21,17 @@ const users = [
 ];
 
 const siteConfig = {
-  title: 'Test Site', // Title for your website.
-  tagline: 'A website for testing',
-  url: 'https://your-docusaurus-test-site.com', // Your website URL
+  title: 'React Filterable Content', // Title for your website.
+  tagline: 'React library to make any react component searchable and filterable',
+  url: 'http://filterable.adnanhidayat.com', // Your website URL
   baseUrl: '/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
   //   baseUrl: '/test-site/',
 
   // Used for publishing and more
-  projectName: 'test-site',
-  organizationName: 'facebook',
+  projectName: 'react-filterable-content',
+  organizationName: 'adnanhidayat',
   // For top-level user or org sites, the organization is still the same.
   // e.g., for the https://JoelMarcey.github.io site, it would be set like...
   //   organizationName: 'JoelMarcey'
@@ -39,9 +39,8 @@ const siteConfig = {
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     {doc: 'doc1', label: 'Docs'},
-    {doc: 'doc4', label: 'API'},
-    {page: 'help', label: 'Help'},
-    {blog: true, label: 'Blog'},
+    {doc: 'doc4', label: 'Guides'},
+    {page: 'help', label: 'Github'},
   ],
 
   // If you have users set above, you add it here:
@@ -73,7 +72,7 @@ const siteConfig = {
   */
 
   // This copyright info is used in /core/Footer.js and blog RSS/Atom feeds.
-  copyright: `Copyright © ${new Date().getFullYear()} Adnan Hidayat P`,
+  copyright: `Copyright © ${new Date().getFullYear()} <a href="http://adnanhidayat.com">Adnan Hidayat P</a>`,
 
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks.
@@ -100,7 +99,7 @@ const siteConfig = {
 
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
-  //   repoUrl: 'https://github.com/facebook/test-site',
+    repoUrl: 'https://github.com/xenovon/react-filterable-content',
 };
 
 module.exports = siteConfig;

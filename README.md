@@ -10,6 +10,20 @@ This is a beta version, currently still need more testing, refactoring and impro
 npm install --save react-filterable-content
 ```
 
+## Test 
+
+Run Test
+
+```bash
+npm run test
+```
+
+Run test with coverage report
+
+```bash
+npm test -- --coverage
+```
+
 ## Usage
 
 ### Basic Usage
@@ -65,7 +79,6 @@ export default class Example extends Component {
 ### More Advanced Usage
 
 *TODO*
-
 
 
 ## License
