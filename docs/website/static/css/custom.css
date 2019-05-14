@@ -14,3 +14,29 @@
 
 @media only screen and (min-width: 1500px) {
 }
+
+.fixedHeaderContainer header .logo {
+  height: 80%;
+}
+
+.fixedHeaderContainer {
+  background: #4c4c4c;
+}
+
+.headerTitleWithLogo {
+  font-weight: 400;
+}
+
+@media only screen and (min-width: 1024px) {
+  .separateOnPageNav .wrapper, .separateOnPageNav .headerWrapper.wrapper {
+      max-width: 900px;
+  }
+}
+
+.navigationSlider .slidingNav ul li > a:focus, .navigationSlider .slidingNav ul li > a:hover, .navigationSlider .slidingNav ul li.siteNavItemActive > a, .navigationSlider .slidingNav ul li.siteNavGroupActive > a {
+  background-color: #6b6a6a;
+}
+
+.nav-footer .sitemap {
+  max-width: 200px;
+}

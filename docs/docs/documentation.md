@@ -1,6 +1,6 @@
 ---
-id: doc1
-title: Latin-ish
+id: documentation
+title: Documentation
 sidebar_label: Docs
 ---
 
@@ -10,11 +10,42 @@ This library work by tapping the component's rendering, going through the compon
 
 ## Getting Started
 
-* FilterableContent
-This is main building block for this library. We should wrap the content that need to be filtered in this component. 
+### Install
 
-* FilterableSection
-This is component
+* **Using NPM**
+
+  ```bash
+  npm install --save react-filterable-content
+  ```
+
+* **Using Yarn**
+  ```bash
+  yarn add react-filterable-content
+  ```
+
+### Test
+
+* **Run Test**
+
+  ```bash
+  npm run test
+  ```
+
+* **Run test with coverage report**
+
+  ```bash
+  npm test -- --coverage
+  ```
+
+## Basic Usage
+
+* **FilterableContent**
+
+  This is main building block for this library. We should wrap the content that need to be filtered in this component. 
+
+* **FilterableSection**
+
+  This is component
 
 ## Config and Customize Filter Behaviour
 There is some configuration that can affect the filter behaviour. Below is the default configuration for the FilterEngine. 
@@ -46,5 +77,59 @@ You can also add specific props to the components to instruct the Filter Engine 
 * *filterable-ignore* - If components has this props, then Filter engine will ignore this component. It will not count as result despite the component has the keyword.
 
 ## Example
+
+### Basic Example
+
+```jsx
+import React, { Component } from 'react'
+import { FilterableContent } from 'react-filterable-content'
+
+export default class Example extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      keyword: '',
+    }  
+    this.onChange = this.onChange.bind(this);
+
+  }
+
+  onChange(event) {
+    if (event && event.target) {
+      const { value } = event.target;
+      this.setState({keyword:value});
+    }
+  }
+
+  render () {
+    let { keyword } = this.state;
+
+    return (
+      <div>
+        <input
+          type={'text'}
+          value={keyword}
+          placeholder={'input keyword'}
+          onChange={this.onChange}
+        />
+
+        <FilterableContent 
+          keyword={keyword}
+          >
+          <p>First Content Here</p>
+          <p>Second Content Here</p>
+          <p>Third Content Here</p>
+        </FilterableContent>
+      </div>
+    )
+  }
+}
+```
+
+### More Advanced Example
+
+
+
 
 

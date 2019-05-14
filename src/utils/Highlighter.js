@@ -1,7 +1,7 @@
 /**
  * Copyright (c) Adnan Hidayat P
  * komputok@gmail.com, http://adnanhidayat.com
- * 
+ *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
@@ -22,11 +22,11 @@ export class Highlighter {
   }
 
   setConfig(config) {
-    this.#config = config;
+    this.#config = config
   }
 
-  resetIteration(){
-    this.#iteration = 0;
+  resetIteration() {
+    this.#iteration = 0
   }
 
   /**
@@ -40,35 +40,34 @@ export class Highlighter {
       let children = getValue(reactNode, 'props.children')
       let newChildren = []
       let clonedNode = reactNode
-      let elementType = 'node' //string, node, non-string-element
+      let elementType = 'node' // string, node, non-string-element
 
       if (typeof reactNode === 'string') {
         newChildren = this.#processHighlightText(reactNode, keyword)
         elementType = 'string'
       } else if (typeof children === 'string') {
-          if(this.#hasIgnoreFlag(reactNode)){
-            elementType='non-string-element'
-          }else{
-            newChildren = this.#processHighlightText(children, keyword)
-          }
+        if (this.#hasIgnoreFlag(reactNode)) {
+          elementType = 'non-string-element'
+        } else {
+          newChildren = this.#processHighlightText(children, keyword)
+        }
       } else if (children && children.forEach) {
         children.forEach(node => {
           newChildren.push(this.injectHighlight(node, keyword))
         })
       } else {
-        elementType='non-string-element'
+        elementType = 'non-string-element'
       }
 
-      if(elementType === 'string'){
-
+      if (elementType === 'string') {
         return React.createElement(
           'span',
           {key: this.#iteration},
           [ ...newChildren]
         )
-      }else if(elementType === 'non-string-element'){
-         return reactNode;
-      }else{
+      } else if (elementType === 'non-string-element') {
+        return reactNode
+      } else {
         return React.cloneElement(
           clonedNode,
           {key: clonedNode.key || this.#iteration},
@@ -81,39 +80,34 @@ export class Highlighter {
   }
 
   #hasIgnoreFlag = node => {
-    if(node && getValue(node, FILTERABLE_IGNORE)){
+    if (node && getValue(node, FILTERABLE_IGNORE)) {
       return true
     }
     return false
   }
-  
 
-  #processHighlightText = (text='', keyword='') => {
-
+  #processHighlightText = (text = '', keyword = '') => {
     let childrens = []
 
     if (typeof text === 'string' && typeof keyword === 'string') {
+      let textLowercase = toLowerCase(text, this.#config)
+      let splittedMap = []
 
-      let textLowercase = toLowerCase(text, this.#config);
-      let splittedMap = [];
-
-      let fromIndex = 0;
-      let i = 0;
+      let fromIndex = 0
+      let i = 0
       do {
         let indexOf = textLowercase.indexOf(toLowerCase(keyword, this.#config), fromIndex)
 
-        if(indexOf >= 0){
+        if (indexOf >= 0) {
           splittedMap.push([fromIndex, indexOf])
-          fromIndex = indexOf + keyword.length;
-        }else{
+          fromIndex = indexOf + keyword.length
+        } else {
           splittedMap.push([fromIndex, textLowercase.length])
-          fromIndex = indexOf;
+          fromIndex = indexOf
         }
 
-        i++;
-
-      } while(fromIndex >= 0 && i < 1000)
-
+        i++
+      } while (fromIndex >= 0 && i < 1000)
 
       for (let i = 0; i < splittedMap.length; i++) {
         let splitter = splittedMap[i]
@@ -127,13 +121,12 @@ export class Highlighter {
               style: this.#config.highlightStyle,
               key: i + '-children'
             },
-            text.substring(splitter[1],splitter[1]+keyword.length)
+            text.substring(splitter[1], splitter[1] + keyword.length)
           ))
         }
       }
-    }  
+    }
 
     return childrens
   }
-
 }

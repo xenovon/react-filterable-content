@@ -1,32 +1,104 @@
 # react-filterable-content
 
-[![NPM](https://img.shields.io/npm/v/react-filterable-content.svg)](https://www.npmjs.com/package/react-filterable-content) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+<p align="center">
+  <img src="https://badgen.net/npm/v/react-filterable-content" alt="">
+  <img src="https://badgen.net/badge/license/MIT/blue" alt="">
+  <img src="https://badgen.net/npm/dt/react-filterable-content" alt="">
+</p>
+
 
 This is a beta version, currently still need more testing, refactoring and improvement. I do not recommend this for production use.
 
-## Install
+## How It's Work
 
-```bash
-npm install --save react-filterable-content
+This library work by tapping the component's rendering, going through the component hierarchy to find the matching keyword, give highlight styling to the matching text and only render the one that has matching text.
+
+## Getting Started
+
+### Install
+
+* **Using NPM**
+
+  ```bash
+  npm install --save react-filterable-content
+  ```
+
+* **Using Yarn**
+  ```bash
+  yarn add react-filterable-content
+  ```
+
+### Test
+
+* **Run Test**
+
+  ```bash
+  npm run test
+  ```
+
+* **Run test with coverage report**
+
+  ```bash
+  npm test -- --coverage
+  ```
+
+## Basic Usage
+
+* **FilterableContent**
+
+  This is main building block for this library. We should wrap the content that need to be filtered in this component. 
+
+  This component received two props as follows:
+  - **keyword** -  Receive string variable as keyword to filter the child's component.
+  - **config** - Receive javascript object contain configuration for the Filter Engine. See *Configuration* section for more detail.
+
+  JSX Example : 
+  ```jsx
+    <FilterableContent 
+      keyword={keyword}
+      config={config}
+      >
+      <p>First Content Here</p>
+      <p>Second Content Here</p>
+      <p>Third Content Here</p>
+    </FilterableContent>
+  ```
+
+## Config and Customize Filter Behaviour
+### Configuration
+There is some configuration that can affect the filter behaviour. Below is the default configuration for the FilterEngine. 
+
+```
+  {
+    maxCache: 30, 
+    highlightResult: true,
+    caseSensitive: false,
+    highlightStyle: {
+      background: '#fff542',
+      display: 'inline',
+      padding: '2px 0'
+    }
+  }
 ```
 
-## Test 
+* *maxCache* - Every search result will be cached in memory, this config is to configure how many search results kept in the memory. 
+* *highlightResult* - Set whether the found keyword should be highlighted or not. You can set this as false to make the searching faster.
+* *caseSensitive* - Set true if you want the searching is case sensitive
+* *highlightStyle* - Styling for the highlight, you can change the color, opacity, and other detail in here. The style should be plain CSS object. 
 
-Run Test
+To override the configuration, you can pass the config object as props in FilterableContent component.
 
-```bash
-npm run test
-```
+### Customize Filter Behaviour
+You can also add specific props to the any components inside <FilterableContent/> to instruct the Filter Engine about what to do with those components. Props that available are: 
 
-Run test with coverage report
+* *filterable-sticky* - It will make sure the component always be displayed, although they don't have the matched keyword. This props can be useful for title component or layout related components, when we want to display thoose component no matter what.
+* *filterable-group* - To group the components. It's useful for a component that consists of several child components, and we want to display all part of the components if there any matching keyword inside the child component. Without this flag, the Filter engine will only show the child that has the matching keyword.
+* *filterable-ignore* - If components have this props, then Filter engine will ignore this component. It will not count as a result although the component has the keyword.
+* *keyword* - We can add additional information to the component with this props without displaying it to the user. The Filter Engine will display the component if the content of keyword props matched with the search input.
 
-```bash
-npm test -- --coverage
-```
+## Example
 
-## Usage
-
-### Basic Usage
+### Basic Example
 
 ```jsx
 import React, { Component } from 'react'
@@ -75,10 +147,12 @@ export default class Example extends Component {
 }
 ```
 
+### Advanced Example
 
-### More Advanced Usage
+Code below is more sophisticated example, we using all available feature in the react-filterable-content.
 
-*TODO*
+
+
 
 
 ## License

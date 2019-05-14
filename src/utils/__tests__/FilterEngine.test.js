@@ -29,7 +29,6 @@ describe('Test ability to merging config object', () => {
   }
 
   it('Can merge from constructor', () => {
-
     const filter = new FilterEngine(mockConfig)
 
     const configTruth = { ...defaultConfig, ...mockConfig}
@@ -38,7 +37,6 @@ describe('Test ability to merging config object', () => {
   })
 
   it('Can merge from setConfig', () => {
-   
     const filter = new FilterEngine()
 
     filter.setConfig(mockConfig)
@@ -53,6 +51,38 @@ describe('Test ability to merging config object', () => {
  * Test ability to filter simple child component based on keyword
  */
 
+describe('Test Ability todo basic filter', () => {
+  const mockComponent = (
+    <div>
+      <p>Text 1</p>
+      <p>text 2</p>
+      <p>Text 3</p>
+      <p>Paragraf 4</p>
+    </div>
+  )
+
+  it('Basic filter with "Text" keyword, with default configuration', () => {
+    const keyword = 'Text'
+
+    const filterEngine = new FilterEngine()
+
+    const truthyComponent = (
+      <div>
+        <p> 1</p>
+        <p>text 2</p>
+        <p>Text 3</p>
+      </div>
+    )
+  })
+
+  it('Basic filter with "text" keyword, with modified configuration', () => {
+    // TODO
+  })
+
+  it('Basic filter with "Paragraf" keyword, with default configuration', () => {
+    // TODO
+  })
+})
 
 /*
  * Test filterable-group functionality

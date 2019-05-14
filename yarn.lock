@@ -9540,6 +9540,13 @@ react-error-overlay@^5.1.5:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-5.1.5.tgz#884530fd055476c764eaa8ab13b8ecf1f57bbf2c"
   integrity sha512-O9JRum1Zq/qCPFH5qVEvDDrVun8Jv9vbHtZXCR1EuRj9sKg1xJTlHxBzU6AkCzpvxRLuiY4OKImy3cDLQ+UTdg==
 
+react-filterable-content@^1.0.0-beta.1:
+  version "1.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/react-filterable-content/-/react-filterable-content-1.0.0-beta.1.tgz#f963170d03b9580f6a86b0c7d50d6f23e54b3113"
+  integrity sha512-OqkQpjHINmlYvOT2hp5gKnZsQnH61xeQbOOr1aIm9FBnDo07e6CNtmS9a/ei4EaJGsoYq9vkvnqsCKbPVLPHlQ==
+  dependencies:
+    lodash.debounce "^4.0.8"
+
 react-is@^16.8.1, react-is@^16.8.4:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"

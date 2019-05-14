@@ -38,18 +38,17 @@ const siteConfig = {
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
-    {doc: 'doc1', label: 'Docs'},
-    {doc: 'doc4', label: 'Guides'},
-    {page: 'help', label: 'Github'},
+    {doc: 'documentation', label: 'Docs'},
+    {href: 'https://github.com/xenovon/react-filterable-content/', label: 'Github'},
   ],
 
   // If you have users set above, you add it here:
   users,
 
   /* path to images for header/footer */
-  headerIcon: 'img/favicon.ico',
-  footerIcon: 'img/favicon.ico',
-  favicon: 'img/favicon.ico',
+  headerIcon: 'img/logo.png',
+  footerIcon: 'img/logo.svg',
+  favicon: 'img/logo.svg',
 
   /* Colors for website */
   colors: {
@@ -72,7 +71,7 @@ const siteConfig = {
   */
 
   // This copyright info is used in /core/Footer.js and blog RSS/Atom feeds.
-  copyright: `Copyright © ${new Date().getFullYear()} <a href="http://adnanhidayat.com">Adnan Hidayat P</a>`,
+  copyright: `Copyright © ${new Date().getFullYear()} Adnan Hidayat P`,
 
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks.

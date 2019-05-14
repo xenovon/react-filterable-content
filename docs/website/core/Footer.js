@@ -36,16 +36,12 @@ class Footer extends React.Component {
             )}
           </a>
           <div>
-            <h5>Docs</h5>
-            <a href={this.docUrl('doc1.html', this.props.language)}>
-              Getting Started
+            <a href="/">
+              Home
             </a>
-            <a href={this.docUrl('doc2.html', this.props.language)}>
-              Guides
+            <a href={this.docUrl('documentation.html', this.props.language)}>
+              Documentation
             </a>
-          </div>
-          <div>
-            <h5>More</h5>
             <a href="https://github.com/xenovon/react-filterable-content">GitHub</a>
             <a
               className="github-button"

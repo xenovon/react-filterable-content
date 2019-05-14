@@ -30,7 +30,8 @@
     "deploy": "gh-pages -d example/build"
   },
   "dependencies": {
-    "lodash.debounce": "^4.0.8"
+    "lodash.debounce": "^4.0.8",
+    "react-filterable-content": "^1.0.0-beta.1"
   },
   "peerDependencies": {
     "prop-types": "^15.5.4",
