@@ -45,7 +45,7 @@ export default class ExampleBlock extends Component {
             stickyContent={<h3>Group Demo</h3>}
            >
             <p>This paragraph is not grouped with the third paragraph</p>
-            <span filterable-group="true">
+            <span filterable-group='true'>
               <p><i>This paragraph</i> is grouped with the third paragraph</p>
               <p>A revenue loses! The owed break refreshes software. Programming weighs the forest. On top of the institute dresses software. Software negates programming into its isolate blessed. The aardvark bells programming over a portrayed biology.</p>
             </span>

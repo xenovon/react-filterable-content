@@ -41,7 +41,7 @@ export default class ExampleCountry extends Component {
       result.push(
         <li key={country.country+'-key'}>
           <FilterableSection
-            filterableKeyword={country.country}
+            filterable-keyword={country.country}
             stickyContent={(
               <h3>{country.country}</h3>
             )}
