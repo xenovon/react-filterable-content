@@ -6,6 +6,9 @@
   <img src="https://badgen.net/npm/dt/react-filterable-content" alt="">
 </p>
 
+## What is this?
+This library makes any react components can be searched or filtered.
+
 ## Working Example
 
 [http://filterable.adnanhidayat.com](http://filterable.adnanhidayat.com)
