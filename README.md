@@ -29,20 +29,6 @@ This library work by tapping the component's rendering, going through the compon
   yarn add react-filterable-content
   ```
 
-### Test
-
-* **Run Test**
-
-  ```bash
-  npm run test
-  ```
-
-* **Run test with coverage report**
-
-  ```bash
-  npm test -- --coverage
-  ```
-
 ## Basic Usage
 
 * **FilterableContent**
