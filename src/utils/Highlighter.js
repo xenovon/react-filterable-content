@@ -9,7 +9,7 @@
  */
 
 import React from 'react'
-import { getValue } from './getValue'
+import getValue from 'lodash/get';
 import { toLowerCase } from './toLowerCase'
 import { FILTERABLE_IGNORE } from './constant'
 

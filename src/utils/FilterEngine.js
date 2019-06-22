@@ -6,11 +6,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React, { Fragment } from 'react';
-import { getValue } from './getValue'
+import getValue from 'lodash/get';
 import { Highlighter } from './Highlighter'
 import { performanceStart, performanceEnd } from './performance'
 import { toLowerCase } from './toLowerCase'
-import { FILTERABLE_GROUP, FILTERABLE_STICKY, FILTERABLE_IGNORE } from './constant'
+import { FILTERABLE_GROUP, FILTERABLE_STICKY, FILTERABLE_IGNORE, FILTERABLE_KEYWORD } from './constant'
 
 
 export const defaultConfig = {
@@ -118,7 +118,7 @@ export class FilterEngine {
           if (typeof value === 'string') {
             nodeText = `${nodeText} ${value}`
           } else if(!this.#hasIgnoreFlag(value)){
-            nodeKeyword = `${nodeKeyword} ${getValue(value, 'props.keyword') || ''} ${getValue(reactNode, 'props.alt') || ''}`
+            nodeKeyword = `${nodeKeyword} ${getValue(value, FILTERABLE_KEYWORD) || ''} ${getValue(reactNode, 'props.alt') || ''}`
             let result = this.#extractText(getValue(value, 'props.children'), nodeText, nodeKeyword)
             nodeText = result.nodeText
             nodeKeyword = result.nodeKeyword              
@@ -127,7 +127,7 @@ export class FilterEngine {
       } else if (typeof reactNode === 'string') {
         nodeText = `${nodeText} ${reactNode}`
       } else if(!this.#hasIgnoreFlag(reactNode)){
-        nodeKeyword = `${nodeKeyword} ${getValue(reactNode, 'props.keyword') || ''} ${getValue(reactNode, 'props.alt') || ''}`
+        nodeKeyword = `${nodeKeyword} ${getValue(reactNode, FILTERABLE_KEYWORD) || ''} ${getValue(reactNode, 'props.alt') || ''}`
         let result = this.#extractText(getValue(reactNode, 'props.children'), nodeText, nodeKeyword)
         nodeText = result.nodeText
         nodeKeyword = result.nodeKeyword         
@@ -142,10 +142,10 @@ export class FilterEngine {
    */
   #processChildren = ({reactNode, parentNode, keyword, result}) => {
     let children = getValue(reactNode, 'props.children')
-    let componentKeyword = `${getValue(reactNode, 'props.keyword') || ''} ${getValue(reactNode, 'props.alt') || ''}`
+    let componentKeyword = `${getValue(reactNode, FILTERABLE_KEYWORD) || ''} ${getValue(reactNode, 'props.alt') || ''}`
 
     if (typeof reactNode === 'string' && parentNode) {
-      let parentKeyword = `${getValue(parentNode, 'props.keyword') || ''} ${getValue(parentNode, 'props.alt') || ''}`
+      let parentKeyword = `${getValue(parentNode, FILTERABLE_KEYWORD) || ''} ${getValue(parentNode, 'props.alt') || ''}`
 
       !this.#hasIgnoreFlag(parentNode) &&
       this.#shouldIncluded(reactNode,

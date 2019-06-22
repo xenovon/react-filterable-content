@@ -1,5 +1,4 @@
 export * from './FilterEngine'
-export * from './getValue'
 export * from './performance'
 export * from './debounceRender'
 export * from './toLowerCase'

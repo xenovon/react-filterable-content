@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import './ExampleCountry.css';
 import countryData from '../data/country-data.json';
 
-import { FilterableContent } from 'react-filterable-content'
+import { FilterableContent, FilterableSection } from 'react-filterable-content'
 
 export default class ExampleCountry extends Component {
 
@@ -33,17 +33,23 @@ export default class ExampleCountry extends Component {
 
       if(states){
         states.forEach( (state, index)=> {
-          stateResult.push(<li key={`${state} ${index}`} keyword={country.country}>{state}</li>);
+          stateResult.push(<li key={`${state} ${index}`} filterable-keyword={country.country}>{state}</li>);
           keyword = `${keyword} ${state}`;
         });
       }
 
       result.push(
         <li key={country.country+'-key'}>
-          <h3 keyword={keyword}>{country.country}</h3>
-          <ul>
-            {stateResult}
-          </ul>
+          <FilterableSection
+            filterableKeyword={country.country}
+            stickyContent={(
+              <h3>{country.country}</h3>
+            )}
+          >
+            <ul>
+              {stateResult}
+            </ul>
+          </FilterableSection>
         </li>
       )
 
